@@ -1,5 +1,16 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { CookiesProvider } from 'next-client-cookies/server';
+// import Link from "next/link";
+// import profile from '../../public/pic/profile.png'
+// import bell from '../../public/pic/Frame.png'
+// import frame2 from '../../public/pic/Frame (1).png'
+// import frame3 from '../../public/pic/Frame (2).png'
+// import Home from '../../public/pic/Home.png'
+// import Boards from '../../public/pic/Boards.png'
+// import Analytics from '../../public/pic/Analytics.png'
+// import Settings from '../../public/pic/Settings.png'
+// import Teams from '../../public/pic/Teams.png'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -9,9 +20,63 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  // const pathname = usePathname()
+
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <head>
+        {/* <style>
+          @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        </style> */}
+      </head>
+      <body className={inter.className}>
+        <CookiesProvider>
+          {/* <main className="w-full overflow-hidden bg-whiteShade flex flex-row">
+            <div className="w-[300px] bg-white border-r-[#DEDEDE] border-2 max-h-screen h-screen overflow-hidden text-whiteShade px-4 py-6 pt-8 hidden md:flex md:flex-col justify-between">
+              <div>
+                <div className="text-xl flex flex-row font-semibold pb-2">
+                  <Image src={profile} alt="profile" width={31} height={31} className="pr-2" />
+                  <div className="text-[#080808] ">Joe Gardner</div>
+                </div>
+                <div className="pb-4">
+                  <div className="flex flex-row justify-between">
+                    <div className="flex flex-row gap-5 items-center">
+                      <Image src={bell} alt="profile" width={24} height={24} className="" />
+                      <Image src={frame2} alt="profile" width={24} height={24} className="" />
+                      <Image src={frame3} alt="profile" width={24} height={24} className="" />
+                    </div>
+                    <div className="text-[#797979] text-base px-2 py-3 rounded bg-[#F4F4F4]">Log Out</div>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2 w-ful">
+                  <Link href={"/"} className={`w-auto p-2 rounded flex flex-row items-center gap-4 border border-transparent cursor-pointer transform duration-[300ms] ease-in-out ${pathname === '/' && 'bg-[#F4F4F4] text-[#797979] border-[#DDDDDD]'}`}>
+                    <Image src={Home} alt="Home" width={24} height={24} />
+                    Home
+                  </Link>
+                  <Link href={"/"} className={`w-auto p-2 rounded flex flex-row items-center gap-4 border border-transparent cursor-pointer transform duration-[300ms] ease-in-out `}>
+                    <Image src={Boards} alt="Boards" width={24} height={24} />
+                    Boards
+                  </Link>
+                  <Link href={"/"} className={`w-auto p-2 rounded flex flex-row items-center gap-4 border border-transparent cursor-pointer transform duration-[300ms] ease-in-out `}>
+                    <Image src={Settings} alt="Settings" width={24} height={24} />
+                    Settings
+                  </Link>
+                  <Link href={"/"} className={`w-auto p-2 rounded flex flex-row items-center gap-4 border border-transparent cursor-pointer transform duration-[300ms] ease-in-out `}>
+                    <Image src={Teams} alt="Teams" width={24} height={24} />
+                    Teams
+                  </Link>
+                  <Link href={"/"} className={`w-auto p-2 rounded flex flex-row items-center gap-4 border border-transparent cursor-pointer transform duration-[300ms] ease-in-out `}>
+                    <Image src={Analytics} alt="Analytics" width={24} height={24} />
+                    Analytics
+                  </Link>
+                </div>
+              </div>
+              <div>Download the app</div>
+            </div> */}
+            {children}
+          {/* </main> */}
+        </CookiesProvider>
+      </body>
     </html>
   );
 }
