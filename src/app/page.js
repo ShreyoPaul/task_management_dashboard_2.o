@@ -134,7 +134,7 @@ export default function page() {
     return (
       <div ref={drag} className={`task flex flex-col justify-center items-start p-[14px] border rounded-lg border-[#DEDEDE] w-full bg-[#F9F9F9] ${isDragging ? "text-gray-400" : ""}`}>
         <div className='text-base text-[#606060] font-semibold'>{listItem.title}</div>
-        <div className='text-[#797979] text-[14px] pt-1 pb-[13px]'>{listItem.desc}</div>
+        <div className='text-[#797979] text-[14px] pt-1 pb-[13px] text-ellipsis overflow-hidden w-full'>{listItem.desc}</div>
         {listItem.priority && <div className={`${listItem.priority === 'Urgent' ? 'bg-[#FF6B6B]' : listItem.priority === 'Medium' ? 'bg-[#FFA235]' : 'bg-[#0ECC5A]'} py-[6px] px-2 text-xs text-white rounded-lg mb-[13px]`}>{listItem.priority}</div>}
         {listItem.deadline && <div className='text-[14px] text-[#606060] flex flex-row gap-2 mb-4 font-semibold'>
           <Image src={clock} alt='bar' width={24} height={24} />
@@ -339,7 +339,7 @@ export default function page() {
           <div>
             <div className="text-xl flex flex-row font-semibold pb-2">
               <Image src={profile} alt="profile" width={31} height={31} className="pr-2" />
-              <div className="text-[#080808] ">{user}</div>
+              <div className="text-[#080808] text-ellipsis overflow-hidden w-full">{user}</div>
             </div>
             <div className="pb-4">
               <div className="flex flex-row justify-between">
