@@ -1,16 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { CookiesProvider } from 'next-client-cookies/server';
-// import Link from "next/link";
-// import profile from '../../public/pic/profile.png'
-// import bell from '../../public/pic/Frame.png'
-// import frame2 from '../../public/pic/Frame (1).png'
-// import frame3 from '../../public/pic/Frame (2).png'
-// import Home from '../../public/pic/Home.png'
-// import Boards from '../../public/pic/Boards.png'
-// import Analytics from '../../public/pic/Analytics.png'
-// import Settings from '../../public/pic/Settings.png'
-// import Teams from '../../public/pic/Teams.png'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,14 +10,10 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  // const pathname = usePathname()
-
   return (
     <html lang="en">
       <head>
-        {/* <style>
-          @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-        </style> */}
+        <link rel="icon" type="image/svg+xml" href="/logo.png" />
       </head>
       <body className={inter.className}>
         <CookiesProvider>
@@ -73,7 +59,7 @@ export default function RootLayout({ children }) {
               </div>
               <div>Download the app</div>
             </div> */}
-            {children}
+          {children}
           {/* </main> */}
         </CookiesProvider>
       </body>
