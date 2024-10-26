@@ -524,7 +524,7 @@ export default function page() {
                 Home
               </Link>
               <Link
-                href={"/boards"}
+                href={"/"}
                 className={`w-auto p-2 rounded flex flex-row items-center gap-4 border border-transparent cursor-pointer transform duration-[300ms] ease-in-out ${
                   pathname === "/boards" &&
                   "bg-[#F4F4F4] text-[#797979] border-[#DDDDDD]"
@@ -534,7 +534,7 @@ export default function page() {
                 Boards
               </Link>
               <Link
-                href={"/settings"}
+                href={"/"}
                 className={`w-auto p-2 rounded flex flex-row items-center gap-4 border border-transparent cursor-pointer transform duration-[300ms] ease-in-out ${
                   pathname === "/settings" &&
                   "bg-[#F4F4F4] text-[#797979] border-[#DDDDDD]"
@@ -544,7 +544,7 @@ export default function page() {
                 Settings
               </Link>
               <Link
-                href={"/teams"}
+                href={"/"}
                 className={`w-auto p-2 rounded flex flex-row items-center gap-4 border border-transparent cursor-pointer transform duration-[300ms] ease-in-out ${
                   pathname === "/teams" &&
                   "bg-[#F4F4F4] text-[#797979] border-[#DDDDDD]"
@@ -554,7 +554,7 @@ export default function page() {
                 Teams
               </Link>
               <Link
-                href={"/analytics"}
+                href={"/"}
                 className={`w-auto p-2 rounded flex flex-row items-center gap-4 border border-transparent cursor-pointer transform duration-[300ms] ease-in-out ${
                   pathname === "/analytics" &&
                   "bg-[#F4F4F4] text-[#797979] border-[#DDDDDD]"
