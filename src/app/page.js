@@ -4,9 +4,9 @@ import { useCookies } from "next-client-cookies";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CiMenuFries, CiSearch } from "react-icons/ci";
-import { MdDelete, MdHelpOutline } from "react-icons/md";
+import { MdDelete, MdEdit, MdHelpOutline } from "react-icons/md";
 import profile from "../../public/pic/profile.png";
 import bell from "../../public/pic/Frame.png";
 import frame2 from "../../public/pic/Frame (1).png";
@@ -33,10 +33,11 @@ import { useDrag } from "react-dnd";
 import toast, { Toaster } from "react-hot-toast";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import bars from "../../public/pic/bars.png";
-import { GoPlus } from "react-icons/go";
+import { GoCopy, GoPlus } from "react-icons/go";
 import Create from "@/components/Create";
 import { createContext } from "react";
 import { BaseURL } from "@/constants/baseUrl";
+import Update from "@/components/Update";
 
 export const statusContext = createContext(null);
 
@@ -71,6 +72,7 @@ export default function page() {
   const [underreview, setUnderreview] = useState([]);
   const [finished, setFinished] = useState([]);
   const [createToggle, setCreateToggle] = useState(false);
+  const [UpdateToggle, setUpdateToggle] = useState(false);
   const [user, setUser] = useState("");
 
   const FetchAllTasks = async () => {
@@ -82,7 +84,6 @@ export default function page() {
       },
     });
     result = await result.json();
-    // console.log(result);
     if (result.data && result.data.tasks) {
       setUser(result.data?.name);
       setTodo(
@@ -132,7 +133,6 @@ export default function page() {
         isDragging: !!monitor.isDragging(),
       }),
     }));
-    // console.log(listItem);
     const y = new Date(listItem.updatedAt);
     return (
       <div
@@ -141,8 +141,16 @@ export default function page() {
           isDragging ? "text-gray-400" : ""
         }`}
       >
-        <div className="text-base text-[#606060] font-semibold">
-          {listItem.title}
+        <div className="flex flex-row justify-between items-center w-full">
+          <div className="text-base text-[#606060] font-semibold">
+            {listItem.title}
+          </div>
+          <GoCopy
+            width={18}
+            height={18}
+            onClick={() => navigator.clipboard.writeText(listItem._id)}
+            className="rounded hover:bg-slate-300 bg-slate-200 text-slate-700 p-1 w-5 h-5"
+          />
         </div>
         <div className="text-[#797979] text-[14px] pt-1 pb-[13px] text-ellipsis overflow-hidden w-full">
           {listItem.desc}
@@ -174,11 +182,10 @@ export default function page() {
     );
   };
 
-  const DropDelete = ({ todo }) => {
+  const DropDelete = () => {
     const [{ isOver }, drop] = useDrop(() => ({
       accept: "task",
       drop: async ({ listItem }) => {
-        console.log("Dropped", listItem);
         let result = await fetch(`${BaseURL}/${listItem._id}`, {
           method: "DELETE",
           mode: "cors",
@@ -201,7 +208,11 @@ export default function page() {
       }),
     }));
     return (
-      <abbr title="Drag to delete task" ref={drop} className={`w-8 h-8 ${isOver && "bg-red-600 rounded"}`}>
+      <abbr
+        title="Drag to delete task"
+        ref={drop}
+        className={`w-8 h-8 ${isOver && "bg-red-600 rounded"}`}
+      >
         {/* <abbr>Drag to delete task</abbr> */}
         <MdDelete
           width={24}
@@ -216,7 +227,6 @@ export default function page() {
     const [{ isOver }, drop] = useDrop(() => ({
       accept: "task",
       drop: async ({ listItem }) => {
-        console.log("Dropped", listItem);
         if (listItem.status != "TODO") {
           let result = await fetch(`${BaseURL}/${listItem._id}`, {
             method: "PATCH",
@@ -280,7 +290,6 @@ export default function page() {
     const [{ isOver }, drop] = useDrop(() => ({
       accept: "task",
       drop: async ({ listItem }) => {
-        console.log("Dropped", listItem);
         if (listItem.status != "IN_PROGRESS") {
           let result = await fetch(`${BaseURL}/${listItem._id}`, {
             method: "PATCH",
@@ -342,7 +351,6 @@ export default function page() {
     const [{ isOver }, drop] = useDrop(() => ({
       accept: "task",
       drop: async ({ listItem }) => {
-        console.log("Dropped", listItem);
         if (listItem.status != "UNDER_REVIEW") {
           let result = await fetch(`${BaseURL}/${listItem._id}`, {
             method: "PATCH",
@@ -404,7 +412,6 @@ export default function page() {
     const [{ isOver }, drop] = useDrop(() => ({
       accept: "task",
       drop: async ({ listItem }) => {
-        console.log("Dropped", listItem);
         if (listItem.status != "FINISHED") {
           let result = await fetch(`${BaseURL}/${listItem._id}`, {
             method: "PATCH",
@@ -621,6 +628,16 @@ export default function page() {
               fetchAllTasks={FetchAllTasks}
             />
           </div>
+          <div
+            className={`fixed top-0 right-[-80vw] duration-300 ease-in-out ${
+              UpdateToggle && "translate-x-[-80vw] z-30"
+            }`}
+          >
+            <Update
+              fetchAllTasks={FetchAllTasks}
+              setUpdateToggle={setUpdateToggle}
+            />
+          </div>
           <div className="w-full flex flex-col justify-between items-center ">
             <div
               className="bg-lightdark absolute top-12 hover:bg-dark rounded-full p-2 text-white md:hidden"
@@ -706,6 +723,15 @@ export default function page() {
                 <CiSearch />
               </div>
               <div className="flex flex-row gap-2 items-center">
+                {/* <DndProvider backend={HTML5Backend}>
+                  <DropEdit todo={todo} />
+                </DndProvider> */}
+                <MdEdit
+                  onClick={() => setUpdateToggle(true)}
+                  width={24}
+                  height={24}
+                  className="w-8 h-8 flex bg-green-500 hover:bg-green-600 rounded text-white p-1 cursor-pointer"
+                />
                 <DndProvider backend={HTML5Backend}>
                   <DropDelete todo={todo} />
                 </DndProvider>
@@ -714,16 +740,6 @@ export default function page() {
                   <Image
                     src={cal}
                     alt="cal"
-                    className="hidden lg:flex"
-                    width={20}
-                    height={20}
-                  />
-                </div>
-                <div className="flex flex-row items-center justify-center bg-[#F4F4F4] p-2 rounded text-[#797979] gap-2">
-                  Automation
-                  <Image
-                    src={auto}
-                    alt="auto"
                     className="hidden lg:flex"
                     width={20}
                     height={20}

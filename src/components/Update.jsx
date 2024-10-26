@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import cross from "../../public/pic/cross.png";
 import share from "../../public/pic/share.png";
 import open from "../../public/pic/open.png";
@@ -8,22 +9,16 @@ import stts from "../../public/pic/status.png";
 import pen from "../../public/pic/pen.png";
 import cal from "../../public/pic/cal.png";
 import priority from "../../public/pic/prio.png";
-import Image from "next/image";
 import { GoPlus } from "react-icons/go";
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { useCookies } from "next-client-cookies";
-import { statusContext } from "@/app/page";
 import { BaseURL } from "@/constants/baseUrl";
+import toast from "react-hot-toast";
 
-{
-  /* <Image src={bars} alt='bar' width={24} height={24} /> */
-}
-
-const Create = ({ setCreateToggle, fetchAllTasks }) => {
-  const { _status, set_status } = useContext(statusContext);
-
-  const [status, setStatus] = useState(_status || "");
+const Update = ({ setUpdateToggle, fetchAllTasks }) => {
   const [title, setTitle] = useState("");
+  const [id, setID] = useState("");
+  const [status, setStatus] = useState("");
   const [prio, setPrio] = useState("");
   const [deadline, setDeadline] = useState("");
   const [desc, setDesc] = useState("");
@@ -44,12 +39,34 @@ const Create = ({ setCreateToggle, fetchAllTasks }) => {
     setDesc(event.target.value);
   };
 
-  const createTask = async () => {
-    if (!title || !desc || !(_status || status))
-      return alert("Status, Title or Description must not be empty!");
-    let res = await fetch(`${BaseURL}/task`, {
+  const fetchTaskDetails = async () => {
+    let res = await fetch(`${BaseURL}/task/${id}`, {
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${cookie}`,
+      },
+    });
+    res = await res.json();
+    if (res && res.result) {
+      setDeadline(res.result.deadline);
+      setDesc(res.result.desc);
+      setTitle(res.result.title);
+      setPrio(res.result.priority);
+      setStatus(res.result.status);
+    } else {
+      toast.error(res.message);
+    }
+  };
+  useEffect(() => {
+    if (id) {
+      fetchTaskDetails();
+    }
+  }, [id]);
+
+  const updateTask = async () => {
+    let res = await fetch(`${BaseURL}/${id}`, {
       mode: "cors",
-      method: "POST",
+      method: "PATCH",
       headers: {
         "content-type": "application/json",
         authorization: `Bearer ${cookie}`,
@@ -58,24 +75,23 @@ const Create = ({ setCreateToggle, fetchAllTasks }) => {
         title,
         desc,
         priority: prio,
-        status: _status || status,
+        status,
         deadline,
       }),
     });
     res = await res.json();
     if (res) {
       fetchAllTasks();
-      set_status("");
+      toast.success(res.message)
     }
     setDeadline("");
-    setStatus(status || "");
+    setStatus("");
     setDesc("");
     setPrio("");
     setTitle("");
-    set_status("");
-    setCreateToggle(false);
+    setID("");
+    setUpdateToggle(false);
   };
-
   return (
     <div className="px-6 py-4 bg-white w-full md:w-[670px] font-barlow h-screen">
       <div className="flex flex-row w-full justify-between mb-[27px]">
@@ -87,23 +103,23 @@ const Create = ({ setCreateToggle, fetchAllTasks }) => {
             height={24}
             className="cursor-pointer"
             onClick={() => {
-              set_status("");
+              setID("");
               setDeadline("");
-              setStatus(status || "");
+              setStatus("");
               setDesc("");
               setPrio("");
               setTitle("");
-              setCreateToggle(false);
+              setUpdateToggle(false);
             }}
           />
           <Image src={open} alt="open" width={24} height={24} />
         </div>
         <div className="flex flex-row gap-4  text-[#797979]">
           <button
-            onClick={createTask}
+            onClick={updateTask}
             className="flex flex-row gap-[14px] justify-center items-center rounded p-2 bg-[#F4F4F4]"
           >
-            Create
+            Update
             <GoPlus className="text-2xl" />
           </button>
           <button className="flex flex-row gap-[14px] justify-center items-center rounded p-2 bg-[#F4F4F4]">
@@ -115,6 +131,15 @@ const Create = ({ setCreateToggle, fetchAllTasks }) => {
             <Image src={star} alt="star" width={24} height={24} />
           </button>
         </div>
+      </div>
+      <div>
+        <input
+          type="text"
+          placeholder="Task ID"
+          value={id}
+          onChange={(e) => setID(e.target.value)}
+          className="text-5xl mb-8 outline-none font-semibold"
+        />
       </div>
       <div className="mb-[38px]">
         <input
@@ -132,7 +157,7 @@ const Create = ({ setCreateToggle, fetchAllTasks }) => {
             </div>
             <select
               id="task-status"
-              value={_status ? _status : status}
+              value={status}
               onChange={handleStatusChange}
               className="outline-none  "
             >
@@ -205,4 +230,4 @@ const Create = ({ setCreateToggle, fetchAllTasks }) => {
   );
 };
 
-export default Create;
+export default Update;
