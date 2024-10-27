@@ -71,10 +71,7 @@ Ensure you have the following installed on your system:
 3. **Update Base Url**
    To add this instruction to the `README.md`, you can specify it in the setup steps like this:
 
-````markdown
-## Additional Setup
-
-1. **Update Base URL for Local Development**
+4. **Update Base URL for Local Development**
 
    Go to `src/constants/baseUrl.js` and replace:
 
@@ -90,25 +87,24 @@ Ensure you have the following installed on your system:
 
 
 
-3. **Access the App**
+5. **Access the App**
 
    Once the server is up, open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
 
-4. **Clone the Repository of server**
+6. **Clone the Repository of server**
 
    ```bash
    cd Server
    git clone https://github.com/ShreyoPaul/task_management_server_2.o.git .
-````
 
-5. **Configure Environment Variables**
+7. **Configure Environment Variables**
 
    ```bash
    MONGODB_URI=<Your MONGODB_URI>
    JWT_SECRET_KEY=<Your JWT_SECRET_KEY>
    ```
 
-6. **Install Dependencies and Start the Development Server**
+8. **Install Dependencies and Start the Development Server**
 
    ```bash
    npm install
